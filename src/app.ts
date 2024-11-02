@@ -5,7 +5,7 @@ import { HttpError } from "http-errors";
 const app = express();
 
 app.get("/", (req, res) => {
-    res.send("Welcome to Auth service");
+    res.send("Welcome to Auth Service");
 });
 
 // Global Middleware -> which automatically execute whenever we hit any api endpoint
