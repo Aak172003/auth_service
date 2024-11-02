@@ -1,4 +1,2 @@
-npm run lint:check
 npm run lint:fix
-npm run format:check
 npm run format:fix
