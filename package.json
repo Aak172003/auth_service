@@ -4,7 +4,7 @@
     "description": "The user management service",
     "main": "index.js",
     "scripts": {
-        "dev": "node src/server.js",
+        "dev": "node src/server.ts",
         "lint:check": "eslint .",
         "lint:fix": "eslint . --fix",
         "format:check": "prettier . --check",
@@ -29,5 +29,8 @@
             "npm run format:fix",
             "npm run lint:fix"
         ]
+    },
+    "dependencies": {
+        "dotenv": "^16.4.5"
     }
 }
