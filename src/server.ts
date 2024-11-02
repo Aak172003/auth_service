@@ -6,7 +6,7 @@ function Welcome(name: string) {
 
     const user = { name: "Aakash" };
 
-    console.log("user ====== ", user.name);
+    console.log("user ====== ", user["name"]);
 }
 
 Welcome("Aakash");
