@@ -4,9 +4,9 @@ function Welcome(name: string) {
     console.log(`Welcoem + ${name}`);
     console.log("Welcome " + name);
 
-    const user = { name: "Aakash" };
+    const user = { name:                                    "Aakash" };
 
-    console.log("user ====== ", user.name);
+    console.log("user ====== ",                               user["name"]);
 }
 
 Welcome("Aakash");
