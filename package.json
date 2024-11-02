@@ -4,7 +4,7 @@
     "description": "The user management service",
     "main": "index.js",
     "scripts": {
-        "dev": "nodemon src/server.ts",
+        "dev": "nodemon src/server.ts --legacy-watch",
         "lint:check": "eslint .",
         "lint:fix": "eslint . --fix",
         "format:check": "prettier . --check",
