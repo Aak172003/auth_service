@@ -1,12 +1,17 @@
 import express, { NextFunction, Request, Response } from "express";
 import logger from "./config/logger";
 import { HttpError } from "http-errors";
+import authRouter from "./routes/auth";
 
 const app = express();
 
 app.get("/", (req, res) => {
     res.send("Welcome to Multi Tenant Auth Service");
 });
+
+// API EndPoints
+
+app.use("/auth", authRouter);
 
 // Global Middleware -> which automatically execute whenever we hit any api endpoint
 // Global error Handler
