@@ -25,6 +25,29 @@ describe("POST /auth/register", () => {
 
             expect(response.statusCode).toBe(201);
         });
+
+        it("should return valid json response", async () => {
+            // Arrange the data
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+
+            // Act on data
+            const response = await request(app)
+                .post("/auth/register")
+                .send(userData);
+
+            console.log("this is response  ---------- ", response.body);
+
+            // Assert -> application/json
+            // response headers has content type information
+            expect(
+                (response.headers as Record<string, string>)["content-type"],
+            ).toEqual(expect.stringContaining("json"));
+        });
     });
     describe("Fields are missin", () => {});
 });
