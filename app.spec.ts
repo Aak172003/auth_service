@@ -4,7 +4,7 @@ import request from "supertest";
 
 // We can skip any test cases for testing
 
-describe.skip("App", () => {
+describe("App", () => {
     it("should return correct discount amount ", () => {
         const discount = calculateDiscount(100, 10);
 
