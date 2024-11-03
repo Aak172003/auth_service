@@ -4,6 +4,8 @@ import request from "supertest";
 
 // We can skip any test cases for testing
 
+console.log("app file--------------", app);
+
 describe("App", () => {
     it("should return correct discount amount ", () => {
         const discount = calculateDiscount(100, 10);
@@ -14,7 +16,6 @@ describe("App", () => {
 
     it("should return 200 statusCode ", async () => {
         const response = await request(app).get("/");
-
         expect(response.statusCode).toBe(200);
     });
 });
