@@ -1,3 +1,6 @@
 # Ignore artifacts:
 dist
 coverage
+tsconfig.json
+package-lock.json
+package.json

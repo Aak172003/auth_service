@@ -93,7 +93,10 @@ describe("POST /auth/register", () => {
 
             const user = await userRepository.find();
 
-            expect(user).toHaveLength(0);
+            expect(user).toHaveLength(1);
+            expect(user[0].email).toEqual(userData.email);
+            expect(user[0].firstName).toEqual(userData.firstName);
+            expect(user[0].lastName).toEqual(userData.lastName);
         });
     });
     describe("Fields are missin", () => {});

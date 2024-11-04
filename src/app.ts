@@ -7,6 +7,7 @@ import authRouter from "./routes/auth";
 
 const app: express.Express = express();
 
+app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Welcome to Multi Tenant Auth Service");
 });
