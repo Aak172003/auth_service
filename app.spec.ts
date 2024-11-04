@@ -15,7 +15,8 @@ describe("App", () => {
     });
 
     it("should return 200 statusCode ", async () => {
-        const response = await request(app).get("/");
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+        const response = await request(app as any).get("/");
         expect(response.statusCode).toBe(200);
     });
 });
