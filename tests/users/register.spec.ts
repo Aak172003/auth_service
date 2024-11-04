@@ -1,7 +1,33 @@
 import request from "supertest";
 import app from "../../src/app";
+import { User } from "../../src/entity/User";
+import { AppDataSource } from "../../src/config/data-source";
+import { truncateTables } from "../../src/utils";
+import { DataSource } from "typeorm";
 
 describe("POST /auth/register", () => {
+    let connection: DataSource;
+
+    beforeAll(async () => {
+        connection = await AppDataSource.initialize();
+
+        console.log("connection is created --------- ", connection);
+    });
+
+    beforeEach(async () => {
+        // Database Truncate
+
+        await truncateTables(connection);
+    });
+
+    afterAll(async () => {
+        if (connection) {
+            await connection.destroy();
+        } else {
+            console.error("Connection is undefined during afterAll");
+        }
+    });
+
     describe("Given all fields", () => {
         it("should return the 201 status code ", async () => {
             // AAA
@@ -44,7 +70,7 @@ describe("POST /auth/register", () => {
             ).toEqual(expect.stringContaining("json"));
         });
 
-        it("should return valid json response", async () => {
+        it("should persist the user in database", async () => {
             // Arrange the data
             const userData = {
                 firstName: "Rakesh",
@@ -58,7 +84,16 @@ describe("POST /auth/register", () => {
             const response = await request(app as any)
                 .post("/auth/register")
                 .send(userData);
+
             console.log("this is response ----- ", response.body);
+
+            const userRepository = connection.getRepository(User);
+
+            console.log("userrepository ------------ ", userRepository);
+
+            const user = await userRepository.find();
+
+            expect(user).toHaveLength(0);
         });
     });
     describe("Fields are missin", () => {});
