@@ -1,8 +1,6 @@
 import request from "supertest";
 import app from "../../src/app";
 
-console.log("app ------- ", app);
-
 describe("POST /auth/register", () => {
     describe("Given all fields", () => {
         it("should return the 201 status code ", async () => {
@@ -20,7 +18,7 @@ describe("POST /auth/register", () => {
             const response = await request(app as any)
                 .post("/auth/register")
                 .send(userData);
-            console.log("this is response  ---------- ", response.body);
+
             // Assert(check output)
             expect(response.statusCode).toBe(201);
         });
@@ -38,7 +36,6 @@ describe("POST /auth/register", () => {
             const response = await request(app as any)
                 .post("/auth/register")
                 .send(userData);
-            console.log("this is response  ---------- ", response.body);
 
             // Assert -> application/json
             // response headers has content type information
