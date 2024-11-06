@@ -148,22 +148,42 @@ describe("POST /auth/register", () => {
             // Act on data
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-            const response = await request(app as any)
+            await request(app as any)
                 .post("/auth/register")
                 .send(userData);
-
-            console.log(
-                "should return id of created user ----------------- ",
-                response.body,
-            );
 
             const userRepository = connection.getRepository(User);
 
             const users = await userRepository.find();
 
             expect(users[0]).toHaveProperty("role");
-
             expect(users[0].role).toBe(Roles.CUSTOMER);
+        });
+
+        it("should store the hashed password", async () => {
+            // Arrange the data
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+            // Act on data
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            const userRepository = connection.getRepository(User);
+
+            const users = await userRepository.find();
+
+            expect(users[0].password).not.toBe(userData.password);
+            expect(users[0].password).toHaveLength(60);
+
+            // Check here this hashd password is really match the wile card pattern
+            expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
         });
     });
     describe("Fields are missin", () => {});

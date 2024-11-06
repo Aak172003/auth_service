@@ -3,6 +3,7 @@ import { User } from "../entity/User";
 import { UserData } from "../types";
 import createHttpError from "http-errors";
 import { Roles } from "../constants";
+import { giveHashedPassword } from "./CredentialService";
 
 export class UserService {
     // Method 1
@@ -28,12 +29,23 @@ export class UserService {
             email,
             password,
         );
+
+        // hashed the password
+        // const saltRounds = 10;
+        // const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+        const hashedPassword = await giveHashedPassword(password);
+
+        console.log(
+            "this is hashed password ---------------- ",
+            hashedPassword,
+        );
         try {
             const savedUser = await this.userRepository.save({
                 firstName,
                 lastName,
                 email,
-                password,
+                password: hashedPassword,
                 role: Roles.CUSTOMER,
             });
 
