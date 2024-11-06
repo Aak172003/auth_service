@@ -3,18 +3,17 @@ import { DataSource } from "typeorm";
 import { User } from "../entity/User";
 import { Config } from ".";
 
-const { DB_PORT, NODE_ENV, DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME } =
-    Config;
+const { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME } = Config;
 
-console.log("Config.DB_NAME from data-source ------ ", DB_NAME);
-console.log(`For data-source ${NODE_ENV} ENVIRONMENT`);
+// console.log("Config.DB_NAME from data-source ------ ", DB_NAME);
+// console.log(`For data-source ${NODE_ENV} ENVIRONMENT`);
 
-console.log("DB_USERNAME from data source ---- ", DB_USERNAME);
+// console.log("DB_USERNAME from data source ---- ", DB_USERNAME);
 
-console.log("DB_USERNAME from data source ---- ", DB_HOST);
-console.log("DB_USERNAME from data source ---- ", DB_USERNAME);
-console.log("DB_USERNAME from data source ---- ", DB_PORT);
-console.log("DB_USERNAME from data source ---- ", DB_PASSWORD);
+// console.log("DB_USERNAME from data source ---- ", DB_HOST);
+// console.log("DB_USERNAME from data source ---- ", DB_USERNAME);
+// console.log("DB_USERNAME from data source ---- ", DB_PORT);
+// console.log("DB_USERNAME from data source ---- ", DB_PASSWORD);
 
 export const AppDataSource = new DataSource({
     type: "postgres",
@@ -32,7 +31,9 @@ export const AppDataSource = new DataSource({
     // synchronise true sirf dev and test ke time pr rhe to hi better hoga , becasue prod me synchronise true hoga so wo sync me rhega agr mai dev me changes krta hu to wo prod ki entities me refrect krega
     // But hum chahte hai ki , prod me any changes reflect kre tb jb migration execute ho
 
-    synchronize: NODE_ENV === "test" || NODE_ENV === "dev",
+    // synchronize: NODE_ENV === "test" || NODE_ENV === "dev",
+    // now mannually hum synchronise kr rhe hai using connection.synchronise()
+    synchronize: false,
     logging: false,
     entities: [User],
     migrations: [],
