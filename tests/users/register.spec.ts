@@ -2,8 +2,9 @@ import request from "supertest";
 import app from "../../src/app";
 import { User } from "../../src/entity/User";
 import { AppDataSource } from "../../src/config/data-source";
-import { truncateTables } from "../../src/utils";
+// import { truncateTables } from "../../src/utils";
 import { DataSource } from "typeorm";
+import { Roles } from "../../src/constants";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -17,7 +18,13 @@ describe("POST /auth/register", () => {
     beforeEach(async () => {
         // Database Truncate
 
-        await truncateTables(connection);
+        // Yaha hum sirf data clean kr rhe hai , dubara connection create nhi kr rhe hai
+        // so db ko sync krne ke lie hume db ke sth new connection create krna pdega
+
+        // await truncateTables(connection);
+
+        await connection.dropDatabase();
+        await connection.synchronize();
     });
 
     afterAll(async () => {
@@ -97,6 +104,66 @@ describe("POST /auth/register", () => {
             expect(user[0].email).toEqual(userData.email);
             expect(user[0].firstName).toEqual(userData.firstName);
             expect(user[0].lastName).toEqual(userData.lastName);
+        });
+
+        it("should return id of created user", async () => {
+            // Arrange the data
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+            // Act on data
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            console.log(
+                "should return id of created user ----------------- ",
+                response.body,
+            );
+
+            expect(response.body).toHaveProperty("id");
+            const userRepository = connection.getRepository(User);
+
+            const users = await userRepository.find();
+
+            // Check here response id and user id in db are same or not
+            expect((response.body as Record<string, string>).id).toBe(
+                users[0].id,
+            );
+        });
+
+        it("should assign a customer role", async () => {
+            // Arrange the data
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+            // Act on data
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            console.log(
+                "should return id of created user ----------------- ",
+                response.body,
+            );
+
+            const userRepository = connection.getRepository(User);
+
+            const users = await userRepository.find();
+
+            expect(users[0]).toHaveProperty("role");
+
+            expect(users[0].role).toBe(Roles.CUSTOMER);
         });
     });
     describe("Fields are missin", () => {});

@@ -1,6 +1,8 @@
 import { Repository } from "typeorm";
 import { User } from "../entity/User";
 import { UserData } from "../types";
+import createHttpError from "http-errors";
+import { Roles } from "../constants";
 
 export class UserService {
     // Method 1
@@ -19,15 +21,33 @@ export class UserService {
     async create({ firstName, lastName, email, password }: UserData) {
         // const userRepository = AppDataSource.getRepository(User);
 
-        const savedUser = await this.userRepository.save({
+        console.log(
+            "object firstName, lastName, email, password  --------------- ",
             firstName,
             lastName,
             email,
             password,
-        });
+        );
+        try {
+            const savedUser = await this.userRepository.save({
+                firstName,
+                lastName,
+                email,
+                password,
+                role: Roles.CUSTOMER,
+            });
 
-        console.log("savedUser ------------ ", savedUser);
+            console.log("savedUser ------------ ", savedUser);
 
-        return savedUser;
+            return savedUser;
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        } catch (err) {
+            const error = createHttpError(
+                500,
+                "Failed to store the data in database",
+            );
+
+            throw error;
+        }
     }
 }
