@@ -185,6 +185,37 @@ describe("POST /auth/register", () => {
             // Check here this hashd password is really match the wile card pattern
             expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
         });
+
+        it("should return 400 status code if given email is already exist", async () => {
+            // Arrange the data
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+            // Act on data
+
+            const userRepository = connection.getRepository(User);
+
+            await userRepository.save({ ...userData, role: Roles.CUSTOMER });
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            console.log(
+                "should return 400 status code if given email is already exist",
+                response.body,
+            );
+
+            const users = await userRepository.find();
+
+            console.log("users -----------", users);
+            expect(response.statusCode).toBe(400);
+            expect(users).toHaveLength(1);
+        });
     });
     describe("Fields are missin", () => {});
 });

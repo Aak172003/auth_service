@@ -20,8 +20,6 @@ export class UserService {
     // }
 
     async create({ firstName, lastName, email, password }: UserData) {
-        // const userRepository = AppDataSource.getRepository(User);
-
         console.log(
             "object firstName, lastName, email, password  --------------- ",
             firstName,
@@ -30,6 +28,21 @@ export class UserService {
             password,
         );
 
+        // Find any user is already register with the email id or not
+
+        const findUser = await this.userRepository.findOne({
+            where: { email: email },
+        });
+
+        console.log(
+            "found the user whose entered email already exist",
+            findUser,
+        );
+
+        if (findUser) {
+            const error = createHttpError(400, "Email already exist");
+            throw error;
+        }
         // hashed the password
         // const saltRounds = 10;
         // const hashedPassword = await bcrypt.hash(password, saltRounds);
