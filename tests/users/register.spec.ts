@@ -217,5 +217,27 @@ describe("POST /auth/register", () => {
             expect(users).toHaveLength(1);
         });
     });
-    describe("Fields are missin", () => {});
+    describe("Fields are missing", () => {
+        it("should reture 400 status code  if email field is missing ", async () => {
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "",
+                password: "secret",
+            };
+            // Act on data
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            const userRepository = connection.getRepository(User);
+
+            // return list of user
+            const users = await userRepository.find();
+            expect(response.statusCode).toBe(400);
+            // Here make sure , if email is not revecive so no new user create in db
+            expect(users).toHaveLength(0);
+        });
+    });
 });

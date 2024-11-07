@@ -4,6 +4,7 @@ import { RegisterUserRequest } from "../types";
 import { UserService } from "../services/UserService";
 import { Logger } from "winston";
 import { ResponseMessage } from "../config/responseMessage";
+import { validationResult } from "express-validator";
 
 export class AuthController {
     constructor(
@@ -15,6 +16,19 @@ export class AuthController {
         res: Response,
         next: NextFunction,
     ) {
+        // if (!email) {
+        //     const error = createHttpError(400, "email is required");
+        //     next(error);
+        //     return;
+        // }
+
+        // Validation
+        const result = validationResult(req);
+
+        if (!result.isEmpty()) {
+            return res.status(400).json({ errors: result.array() });
+        }
+
         const { firstName, lastName, email, password } = req.body;
 
         // This is logger
