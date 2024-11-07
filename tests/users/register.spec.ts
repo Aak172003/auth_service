@@ -218,7 +218,7 @@ describe("POST /auth/register", () => {
         });
     });
     describe("Fields are missing", () => {
-        it("should reture 400 status code  if email field is missing ", async () => {
+        it("should reture 400 status code  if email field is missing", async () => {
             const userData = {
                 firstName: "Rakesh",
                 lastName: "K",
@@ -239,5 +239,116 @@ describe("POST /auth/register", () => {
             // Here make sure , if email is not revecive so no new user create in db
             expect(users).toHaveLength(0);
         });
+
+        it("should reture 400 status code  if firstName field is missing", async () => {
+            const userData = {
+                firstName: "",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+            // Act on data
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            const userRepository = connection.getRepository(User);
+
+            // return list of user
+            const users = await userRepository.find();
+            expect(response.statusCode).toBe(400);
+            // Here make sure , if email is not revecive so no new user create in db
+            expect(users).toHaveLength(0);
+        });
+
+        it("should reture 400 status code  if lastName field is missing", async () => {
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+            // Act on data
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            const userRepository = connection.getRepository(User);
+
+            // return list of user
+            const users = await userRepository.find();
+            expect(response.statusCode).toBe(400);
+            // Here make sure , if email is not revecive so no new user create in db
+            expect(users).toHaveLength(0);
+        });
+
+        it("should reture 400 status code  if password field is missing", async () => {
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "",
+            };
+            // Act on data
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            const userRepository = connection.getRepository(User);
+
+            // return list of user
+            const users = await userRepository.find();
+            expect(response.statusCode).toBe(400);
+            // Here make sure , if email is not revecive so no new user create in db
+            expect(users).toHaveLength(0);
+        });
+
+        // Pending Tests
+
+        it.todo(
+            "should return message (Password is too short) if password length less than 8 ",
+        );
+
+        it.todo(
+            "should return message (Password is too long) if password length greater than 10 ",
+        );
+    });
+
+    describe("Fields are not in ptoper format", () => {
+        it("shoould truim the email field", async () => {
+            // Arrange,
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "          rakesh@mern.space          ",
+                password: "secret",
+            };
+
+            // Act
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            const userRepositery = connection.getRepository(User);
+            const users = await userRepositery.find();
+
+            const trimEmail = userData.email.trim();
+
+            console.log("users[0].email ------------------ ", users[0].email);
+            expect(users[0].email).toBe(trimEmail);
+        });
+
+        // Pending Tests
+
+        test.todo(
+            "should return 400 status code if email is not as valid email",
+        );
+        test.todo(
+            "should return 400 status code if password length is less than 8 characters",
+        );
     });
 });

@@ -23,4 +23,8 @@ export default checkSchema({
         notEmpty: true,
         trim: true,
     },
+    password: {
+        errorMessage: "Password is Required",
+        notEmpty: true,
+    },
 });
