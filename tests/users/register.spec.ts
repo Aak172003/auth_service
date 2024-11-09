@@ -5,6 +5,7 @@ import { AppDataSource } from "../../src/config/data-source";
 // import { truncateTables } from "../../src/utils";
 import { DataSource } from "typeorm";
 import { Roles } from "../../src/constants";
+import { isJWT } from "../../src/utils";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -215,6 +216,61 @@ describe("POST /auth/register", () => {
             console.log("users -----------", users);
             expect(response.statusCode).toBe(400);
             expect(users).toHaveLength(1);
+        });
+
+        // ---------------------------------------- JWT Token TestCases -------------------------------------------
+
+        test("should return the acess token and refresh token inside a cookie ", async () => {
+            // Arrange the data
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            console.log(
+                "should return the acess token and refresh token inside a cookie  ",
+                response.body,
+            );
+
+            // Assert
+            let accessToken = null;
+            let refreshToken = null;
+
+            const cookies = response.headers["set-cookie"] || [];
+            console.log("coookie ---------------", cookies);
+
+            for (const cookie of cookies) {
+                console.log("cookie ------------- ", cookie);
+
+                if (cookie.startsWith("accessToken=")) {
+                    accessToken = cookie.split("=")[1].split(";")[0];
+                }
+
+                if (cookie.startsWith("refreshToken=")) {
+                    refreshToken = cookie.split("=")[1].split(";")[0];
+                }
+            }
+
+            console.log(
+                "accessToken ::::::::::::::::::::::::::::::::::::::::",
+                accessToken,
+            );
+            console.log(
+                "refreshToken ::::::::::::::::::::::::::::::::::::::::",
+                refreshToken,
+            );
+            expect(accessToken).not.toBeNull();
+            expect(refreshToken).not.toBeNull();
+
+            expect(isJWT(accessToken)).toBe(true);
+            expect(isJWT(refreshToken)).toBe(true);
         });
     });
     describe("Fields are missing", () => {

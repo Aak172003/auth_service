@@ -7,8 +7,16 @@ config({
     path: path.join(__dirname, `../../.env.${process.env.NODE_ENV || "dev"}`),
 });
 
-const { PORT, NODE_ENV, DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME } =
-    process.env;
+const {
+    PORT,
+    NODE_ENV,
+    DB_HOST,
+    DB_PORT,
+    DB_USERNAME,
+    DB_PASSWORD,
+    DB_NAME,
+    REFRESH_SECRET_KEY,
+} = process.env;
 
 // console.log("Config.DB_NAME from data-source ------ ", DB_NAME);
 // console.log(`For data-source ${NODE_ENV} ENVIRONMENT`);
@@ -28,4 +36,5 @@ export const Config = {
     DB_USERNAME,
     DB_PASSWORD,
     DB_NAME,
+    REFRESH_SECRET_KEY,
 };
