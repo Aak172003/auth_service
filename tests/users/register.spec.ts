@@ -6,6 +6,7 @@ import { AppDataSource } from "../../src/config/data-source";
 import { DataSource } from "typeorm";
 import { Roles } from "../../src/constants";
 import { isJWT } from "../../src/utils";
+import { RefreshToken } from "../../src/entity/RefreshToken";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -220,7 +221,7 @@ describe("POST /auth/register", () => {
 
         // ---------------------------------------- JWT Token TestCases -------------------------------------------
 
-        test("should return the acess token and refresh token inside a cookie ", async () => {
+        it("should return the acess token and refresh token inside a cookie ", async () => {
             // Arrange the data
             const userData = {
                 firstName: "Rakesh",
@@ -271,6 +272,45 @@ describe("POST /auth/register", () => {
 
             expect(isJWT(accessToken)).toBe(true);
             expect(isJWT(refreshToken)).toBe(true);
+        });
+
+        it("should store the refresh token in the database", async () => {
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            console.log(
+                "should store the refresh token in the database",
+                response.body,
+            );
+
+            const refreshTokenRepo = connection.getRepository(RefreshToken);
+
+            const refreshTokens = await refreshTokenRepo.find();
+
+            console.log(
+                "refreshTokens ------------------------------ ",
+                refreshTokens,
+            );
+
+            // here i check explicitely that
+            const tokens = await refreshTokenRepo
+                .createQueryBuilder("refreshToken")
+                .where("refreshToken.userId = :userId", {
+                    userId: (response.body as Record<string, string>).id,
+                })
+                .getMany();
+
+            expect(tokens).toHaveLength(1);
+            expect(refreshTokens).toHaveLength(1);
         });
     });
     describe("Fields are missing", () => {

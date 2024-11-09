@@ -25,4 +25,13 @@ router.post(
     },
 );
 
+router.post(
+    "/login",
+
+    registerValidator,
+    (req: Request, res: Response, next: NextFunction) => {
+        authController.login(req, res, next);
+    },
+);
+
 export default router;

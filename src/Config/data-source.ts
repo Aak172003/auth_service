@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { User } from "../entity/User";
 import { Config } from ".";
 
 const { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME } = Config;
@@ -35,7 +34,10 @@ export const AppDataSource = new DataSource({
     // now mannually hum synchronise kr rhe hai using connection.synchronise()
     synchronize: false,
     logging: false,
-    entities: [User],
+
+    // entities: [User, RefreshToken],
+    entities: ["src/entity/*.ts"],
+    // this is wild card pattern . here src/entity/*.ts -> * means any filename with .ts extension from src/entity directory
     migrations: [],
     subscribers: [],
 });

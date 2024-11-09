@@ -40,9 +40,7 @@
         "typescript-eslint": "^8.12.2"
     },
     "lint-staged": {
-        "*.ts": [
-            "npm run format:fix"
-        ]
+        "*.ts": ["npm run format:fix"]
     },
     "dependencies": {
         "@types/bcrypt": "^5.0.2",
