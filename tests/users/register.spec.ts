@@ -5,6 +5,7 @@ import { AppDataSource } from "../../src/config/data-source";
 // import { truncateTables } from "../../src/utils";
 import { DataSource } from "typeorm";
 import { Roles } from "../../src/constants";
+import { isJWT } from "../../src/utils";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -215,6 +216,64 @@ describe("POST /auth/register", () => {
             console.log("users -----------", users);
             expect(response.statusCode).toBe(400);
             expect(users).toHaveLength(1);
+        });
+
+        // ---------------------------------------- JWT Token TestCases -------------------------------------------
+
+        test("should return the acess token and refresh token inside a cookie ", async () => {
+            // Arrange the data
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/auth/register")
+                .send(userData);
+
+            console.log(
+                "should return the acess token and refresh token inside a cookie  ",
+                response.body,
+            );
+
+            // Assert
+            let accessToken = null;
+            let refreshToken = null;
+
+            // accessToken=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1Iiwicm9sZSI6IkFkbWluIiwiaWF0IjoxNzMwNTIzMzk3LCJleHAiOjE3MzA1MjY5OTcsImlzcyI6ImF1dGgtc2VydmljZSJ9.iMeBOMOUJxj-OAzEPIBfTuE3iyELSIMlETMjJy3zViyzYIiFv83XxXN8eJ4qOHtmiael2uwBks3uQafBXOm6PE2ep9rPLLNlLHxzegWqG2Eop9hj6uYpuegJ_1GuXiVBdEjqb4p9WjyoD55i4aBxQnRP1qU9Sfw2eQOW16scFn655Gqku3ucQ9_7RdOjcH-ryM-oID03mLLqsjsmi8tdSrHCPpWSzrnj8vdFzm81BFqNCsygcYRwoBfK-rRpwOrWMmfRUv2JsI-hBsaA77R0u83-gx1svfTVghIh8RUSFjn9bCYOZb3ThCKWIn3KgQ25d_4ZjBCvCRvUhUqqNXIyLQ; Expires=Sat, 02 Nov 2024 05:56:37 GMT; Max-Age=3600; Domain=localhost; Path=/; HttpOnly; SameSite=Strict
+            // refreshToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI1Iiwicm9sZSI6IkFkbWluIiwiaWQiOiIyIiwiaWF0IjoxNzMwNTIzMzk3LCJleHAiOjE3MzA1MjY5OTcsImlzcyI6ImF1dGgtc2VydmljZSIsImp0aSI6IjIifQ.8oITaVQ5F2w1QwGKxjskSdPxU8oYcacklKryogaQTU4; Expires=Sun, 02 Nov 2025 04:56:37 GMT; Max-Age=31536000; Domain=localhost; Path=/; HttpOnly; SameSite=Strict
+
+            const cookies = response.headers["set-cookie"] || [];
+            console.log("coookie ---------------", cookies);
+
+            for (const cookie of cookies) {
+                console.log("cookie ------------- ", cookie);
+
+                if (cookie.startsWith("accessToken=")) {
+                    accessToken = cookie.split("=")[1].split(";")[0];
+                }
+
+                if (cookie.startsWith("refreshToken=")) {
+                    refreshToken = cookie.split("=")[1].split(";")[0];
+                }
+            }
+
+            console.log(
+                "accessToken ::::::::::::::::::::::::::::::::::::::::",
+                accessToken,
+            );
+            console.log(
+                "refreshToken ::::::::::::::::::::::::::::::::::::::::",
+                refreshToken,
+            );
+            expect(accessToken).not.toBeNull();
+            expect(refreshToken).not.toBeNull();
+
+            expect(isJWT(accessToken)).toBe(true);
+            expect(isJWT(refreshToken)).toBe(true);
         });
     });
     describe("Fields are missing", () => {
