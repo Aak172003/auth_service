@@ -20,24 +20,10 @@ export class UserService {
     // }
 
     async create({ firstName, lastName, email, password }: UserData) {
-        console.log(
-            "object firstName, lastName, email, password  --------------- ",
-            firstName,
-            lastName,
-            email,
-            password,
-        );
-
         // Find any user is already register with the email id or not
-
         const findUser = await this.userRepository.findOne({
             where: { email: email },
         });
-
-        console.log(
-            "found the user whose entered email already exist",
-            findUser,
-        );
 
         if (findUser) {
             const error = createHttpError(400, "Email already exist");
@@ -48,11 +34,6 @@ export class UserService {
         // const hashedPassword = await bcrypt.hash(password, saltRounds);
 
         const hashedPassword = await giveHashedPassword(password);
-
-        console.log(
-            "this is hashed password ---------------- ",
-            hashedPassword,
-        );
         try {
             const savedUser = await this.userRepository.save({
                 firstName,
@@ -61,9 +42,6 @@ export class UserService {
                 password: hashedPassword,
                 role: Roles.CUSTOMER,
             });
-
-            console.log("savedUser ------------ ", savedUser);
-
             return savedUser;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {

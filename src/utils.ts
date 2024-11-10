@@ -32,8 +32,6 @@ export const isJWT = (token: string | null): boolean => {
     if (parts.length !== 3) {
         return false;
     }
-    console.log("parts :::::: ", parts);
-
     try {
         parts.forEach((part) => {
             Buffer.from(part, "base64").toString("utf-8");

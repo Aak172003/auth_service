@@ -5,18 +5,14 @@ import { UserService } from "../services/UserService";
 import { Logger } from "winston";
 import { ResponseMessage } from "../config/responseMessage";
 import { validationResult } from "express-validator";
-import { JwtPayload, sign } from "jsonwebtoken";
-import fs from "fs";
-import path from "path";
-import createHttpError from "http-errors";
-import { Config } from "../config";
-import { AppDataSource } from "../config/data-source";
-import { RefreshToken } from "../entity/RefreshToken";
+import { JwtPayload } from "jsonwebtoken";
+import { TokenService } from "../services/TokenService";
 
 export class AuthController {
     constructor(
         private userService: UserService,
         private logger: Logger,
+        private tokenService: TokenService,
     ) {}
     async register(
         req: RegisterUserRequest,
@@ -57,54 +53,29 @@ export class AuthController {
                 id: createdUser.id,
                 user: createdUser,
             });
-            console.log("createdUser ---------- ", createdUser);
 
-            let privateKey: Buffer;
-
-            try {
-                // __dirname means pointing to current folder
-                privateKey = fs.readFileSync(
-                    path.join(__dirname, "../../certs/private.pem"),
-                );
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            } catch (err) {
-                const error = createHttpError(
-                    500,
-                    "Error while reading private Key",
-                );
-                next(error);
-                return;
-            }
             const payLoad: JwtPayload = {
                 // sub me jiske lie token generate ho rha hai
                 sub: String(createdUser.id),
                 role: createdUser.role,
             };
-            const accessToken = sign(payLoad, privateKey, {
-                algorithm: "RS256",
-                expiresIn: "1h",
-                // which service sign this token
-                issuer: "auth-service",
-            });
+
+            const accessToken = this.tokenService.generateToken(payLoad);
 
             // Persist the refresh token in the database correspoint to user
 
-            const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365; // Leap Year
-            const refreshTokenRepository =
-                AppDataSource.getRepository(RefreshToken);
+            // const MS_IN_YEAR = 1000 * 60 * 60 * 24 * 365; // Leap Year
+            // const refreshTokenRepository =
+            //     AppDataSource.getRepository(RefreshToken);
 
-            const newRefreshToken = await refreshTokenRepository.save({
-                // here we send whole user data , internally typeorm create userId field and assign createduser id to it
-                user: createdUser,
-                expiresAt: new Date(Date.now() + MS_IN_YEAR),
+            const newRefreshToken =
+                await this.tokenService.persistRefreshToken(createdUser);
+
+            const refreshToken = this.tokenService.generateRefreshToken({
+                ...payLoad,
+                id: String(newRefreshToken.id),
             });
 
-            const refreshToken = sign(payLoad, Config.REFRESH_SECRET_KEY!, {
-                algorithm: "HS256",
-                expiresIn: "1y",
-                issuer: "auth-service",
-                jwtid: String(newRefreshToken.id),
-            });
             res.cookie("accessToken", accessToken, {
                 domain: "localhost",
                 sameSite: "strict", // security

@@ -3,13 +3,11 @@ import app from "../../src/app";
 import { AppDataSource } from "../../src/config/data-source";
 import { DataSource } from "typeorm";
 
-describe("POST /auth/register", () => {
+describe("POST /auth/login", () => {
     let connection: DataSource;
 
     beforeAll(async () => {
         connection = await AppDataSource.initialize();
-
-        console.log("connection is created --------- ", connection);
     });
 
     beforeEach(async () => {
@@ -17,9 +15,6 @@ describe("POST /auth/register", () => {
 
         // Yaha hum sirf data clean kr rhe hai , dubara connection create nhi kr rhe hai
         // so db ko sync krne ke lie hume db ke sth new connection create krna pdega
-
-        // await truncateTables(connection);
-
         await connection.dropDatabase();
         await connection.synchronize();
     });
@@ -41,7 +36,6 @@ describe("POST /auth/register", () => {
                 email: "rakesh@mern.space",
                 password: "secret",
             };
-            // Act on data
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
             const response = await request(app as any)

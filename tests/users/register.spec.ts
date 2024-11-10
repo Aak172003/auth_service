@@ -2,7 +2,6 @@ import request from "supertest";
 import app from "../../src/app";
 import { User } from "../../src/entity/User";
 import { AppDataSource } from "../../src/config/data-source";
-// import { truncateTables } from "../../src/utils";
 import { DataSource } from "typeorm";
 import { Roles } from "../../src/constants";
 import { isJWT } from "../../src/utils";
@@ -13,8 +12,6 @@ describe("POST /auth/register", () => {
 
     beforeAll(async () => {
         connection = await AppDataSource.initialize();
-
-        console.log("connection is created --------- ", connection);
     });
 
     beforeEach(async () => {
@@ -90,16 +87,11 @@ describe("POST /auth/register", () => {
             // Act on data
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
-            const response = await request(app as any)
+            await request(app as any)
                 .post("/auth/register")
                 .send(userData);
 
-            console.log("this is response ----- ", response.body);
-
             const userRepository = connection.getRepository(User);
-
-            console.log("userrepository ------------ ", userRepository);
-
             const user = await userRepository.find();
 
             expect(user).toHaveLength(1);
@@ -123,14 +115,8 @@ describe("POST /auth/register", () => {
                 .post("/auth/register")
                 .send(userData);
 
-            console.log(
-                "should return id of created user ----------------- ",
-                response.body,
-            );
-
             expect(response.body).toHaveProperty("id");
             const userRepository = connection.getRepository(User);
-
             const users = await userRepository.find();
 
             // Check here response id and user id in db are same or not
@@ -155,7 +141,6 @@ describe("POST /auth/register", () => {
                 .send(userData);
 
             const userRepository = connection.getRepository(User);
-
             const users = await userRepository.find();
 
             expect(users[0]).toHaveProperty("role");
@@ -207,14 +192,7 @@ describe("POST /auth/register", () => {
                 .post("/auth/register")
                 .send(userData);
 
-            console.log(
-                "should return 400 status code if given email is already exist",
-                response.body,
-            );
-
             const users = await userRepository.find();
-
-            console.log("users -----------", users);
             expect(response.statusCode).toBe(400);
             expect(users).toHaveLength(1);
         });
@@ -235,21 +213,13 @@ describe("POST /auth/register", () => {
                 .post("/auth/register")
                 .send(userData);
 
-            console.log(
-                "should return the acess token and refresh token inside a cookie  ",
-                response.body,
-            );
-
             // Assert
             let accessToken = null;
             let refreshToken = null;
 
             const cookies = response.headers["set-cookie"] || [];
-            console.log("coookie ---------------", cookies);
 
             for (const cookie of cookies) {
-                console.log("cookie ------------- ", cookie);
-
                 if (cookie.startsWith("accessToken=")) {
                     accessToken = cookie.split("=")[1].split(";")[0];
                 }
@@ -259,14 +229,6 @@ describe("POST /auth/register", () => {
                 }
             }
 
-            console.log(
-                "accessToken ::::::::::::::::::::::::::::::::::::::::",
-                accessToken,
-            );
-            console.log(
-                "refreshToken ::::::::::::::::::::::::::::::::::::::::",
-                refreshToken,
-            );
             expect(accessToken).not.toBeNull();
             expect(refreshToken).not.toBeNull();
 
@@ -287,19 +249,9 @@ describe("POST /auth/register", () => {
                 .post("/auth/register")
                 .send(userData);
 
-            console.log(
-                "should store the refresh token in the database",
-                response.body,
-            );
-
             const refreshTokenRepo = connection.getRepository(RefreshToken);
 
             const refreshTokens = await refreshTokenRepo.find();
-
-            console.log(
-                "refreshTokens ------------------------------ ",
-                refreshTokens,
-            );
 
             // here i check explicitely that
             const tokens = await refreshTokenRepo
@@ -434,7 +386,6 @@ describe("POST /auth/register", () => {
 
             const trimEmail = userData.email.trim();
 
-            console.log("users[0].email ------------------ ", users[0].email);
             expect(users[0].email).toBe(trimEmail);
         });
 
