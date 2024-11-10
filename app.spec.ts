@@ -7,8 +7,6 @@ import request from "supertest";
 describe("App", () => {
     it("should return correct discount amount ", () => {
         const discount = calculateDiscount(100, 10);
-
-        console.log("discount - ", discount);
         expect(discount).toBe(10);
     });
 

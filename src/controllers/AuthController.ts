@@ -1,6 +1,6 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 
-import { LoginUserRequest, RegisterUserRequest } from "../types";
+import { AuthRequest, LoginUserRequest, RegisterUserRequest } from "../types";
 import { UserService } from "../services/UserService";
 import { Logger } from "winston";
 import { ResponseMessage } from "../config/responseMessage";
@@ -187,8 +187,8 @@ export class AuthController {
         }
     }
 
-    // eslint-disable-next-line @typescript-eslint/require-await
-    async self(req: Request, res: Response) {
-        res.json({});
+    async self(req: AuthRequest, res: Response) {
+        const user = await this.userService.findById(Number(req.auth.sub));
+        res.json(user);
     }
 }

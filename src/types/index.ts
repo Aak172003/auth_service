@@ -13,3 +13,14 @@ export interface RegisterUserRequest extends Request {
 export interface LoginUserRequest extends Request {
     body: UserData;
 }
+
+export interface AuthRequest extends Request {
+    auth: {
+        sub: string;
+        role: string;
+    };
+}
+
+export type AuthCookie = {
+    accessToken: string;
+};

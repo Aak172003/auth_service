@@ -36,18 +36,32 @@ describe("Get /auth/self", () => {
 
     describe("Given all fields", () => {
         it("should return the 200 status code ", async () => {
+            // Generate a Token
+            const accesstoken = jwks.token({
+                sub: "1",
+                role: Roles.CUSTOMER,
+            });
+
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
             const response = await request(app as any)
                 .get("/auth/self")
+                .set("Cookie", [`accessToken=${accesstoken};`])
                 .send();
 
             expect(response.statusCode).toBe(200);
         });
 
         it("should return valid json response", async () => {
+            // Generate a Token
+            const accesstoken = jwks.token({
+                sub: "1",
+                role: Roles.CUSTOMER,
+            });
+
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
             const response = await request(app as any)
                 .get("/auth/self")
+                .set("Cookie", [`accessToken=${accesstoken};`])
                 .send();
 
             expect(
@@ -57,7 +71,6 @@ describe("Get /auth/self", () => {
 
         it("should return user data as response", async () => {
             // Register user
-            // Arrange the data
             const userData = {
                 firstName: "Rakesh",
                 lastName: "K",
@@ -66,35 +79,26 @@ describe("Get /auth/self", () => {
             };
 
             const hashedPassword = await bcrypt.hash(userData.password, 10);
-
             const userRepository = connection.getRepository(User);
-
             const savedUser = await userRepository.save({
                 ...userData,
                 password: hashedPassword,
                 role: Roles.CUSTOMER,
             });
 
-            console.log(
-                "savedUser savedUser savedUser savedUser savedUser ================= ",
-                savedUser,
-            );
             // Generate a Token
-
             const accesstoken = jwks.token({
                 sub: String(savedUser.id),
                 role: savedUser.role,
             });
-            // Add tooken in cookie and send with the request
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
             const response = await request(app as any)
                 .get("/auth/self")
-                .set("Cookie", [`accessToken=${accesstoken}`])
+                .set("Cookie", [`accessToken=${accesstoken};`])
                 .send();
 
-            // check is user id matches with the registered user
-
+            // Ensure the response contains the user data
             expect((response.body as Record<string, string>).id).toBe(
                 savedUser.id,
             );
