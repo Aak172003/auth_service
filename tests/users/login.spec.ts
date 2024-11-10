@@ -56,11 +56,6 @@ describe("POST /auth/login", () => {
                 .send(userData);
 
             // Assert(check output)
-
-            console.log(
-                "response ofg login ------------------- ",
-                response.body,
-            );
             expect(response.statusCode).toBe(200);
         });
 
