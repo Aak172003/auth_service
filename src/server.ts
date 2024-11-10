@@ -8,6 +8,7 @@ const startServer = async () => {
     try {
         // Need too create connection with database
         await AppDataSource.initialize();
+
         logger.info("Datbase connect Successfully");
 
         app.listen(PORT, () => {

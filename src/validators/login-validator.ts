@@ -5,18 +5,8 @@
 // Scema Validation
 import { checkSchema } from "express-validator";
 export default checkSchema({
-    firstName: {
-        errorMessage: "First Name is Required",
-        notEmpty: true,
-        trim: true,
-    },
-    lastName: {
-        errorMessage: "Last Name is Required",
-        notEmpty: true,
-        trim: true,
-    },
     email: {
-        errorMessage: "Email is always Required",
+        errorMessage: "Email is always Required for login",
         notEmpty: true,
         trim: true,
         isEmail: {
@@ -24,7 +14,7 @@ export default checkSchema({
         },
     },
     password: {
-        errorMessage: "Password is Required",
+        errorMessage: "Password is Required for login",
         notEmpty: true,
     },
 });

@@ -2,6 +2,9 @@ import request from "supertest";
 import app from "../../src/app";
 import { AppDataSource } from "../../src/config/data-source";
 import { DataSource } from "typeorm";
+import bcrypt from "bcrypt";
+import { User } from "../../src/entity/User";
+import { Roles } from "../../src/constants";
 
 describe("POST /auth/login", () => {
     let connection: DataSource;
@@ -37,12 +40,27 @@ describe("POST /auth/login", () => {
                 password: "secret",
             };
 
+            const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+            const userRepository = connection.getRepository(User);
+
+            await userRepository.save({
+                ...userData,
+                password: hashedPassword,
+                role: Roles.CUSTOMER,
+            });
+
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
             const response = await request(app as any)
                 .post("/auth/login")
                 .send(userData);
 
             // Assert(check output)
+
+            console.log(
+                "response ofg login ------------------- ",
+                response.body,
+            );
             expect(response.statusCode).toBe(200);
         });
 
@@ -54,6 +72,16 @@ describe("POST /auth/login", () => {
                 email: "rakesh@mern.space",
                 password: "secret",
             };
+
+            const hashedPassword = await bcrypt.hash(userData.password, 10);
+
+            const userRepository = connection.getRepository(User);
+
+            await userRepository.save({
+                ...userData,
+                password: hashedPassword,
+                role: Roles.CUSTOMER,
+            });
             // Act on data
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
             const response = await request(app as any)
@@ -62,6 +90,8 @@ describe("POST /auth/login", () => {
 
             // Assert -> application/json
             // response headers has content type information
+
+            expect(response.statusCode).toBe(200);
             expect(
                 (response.headers as Record<string, string>)["content-type"],
             ).toEqual(expect.stringContaining("json"));

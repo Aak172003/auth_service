@@ -3,11 +3,14 @@ import { User } from "../entity/User";
 import { UserData } from "../types";
 import createHttpError from "http-errors";
 import { Roles } from "../constants";
-import { giveHashedPassword } from "./CredentialService";
+import { CredentialService } from "./CredentialService";
 
 export class UserService {
     // Method 1
-    constructor(private userRepository: Repository<User>) {}
+    constructor(
+        private userRepository: Repository<User>,
+        private credentialService: CredentialService,
+    ) {}
 
     // Method 2
     // userRepositery: Repository<User>;
@@ -33,7 +36,8 @@ export class UserService {
         // const saltRounds = 10;
         // const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        const hashedPassword = await giveHashedPassword(password);
+        const hashedPassword =
+            await this.credentialService.giveHashedPassword(password);
         try {
             const savedUser = await this.userRepository.save({
                 firstName,
@@ -52,5 +56,12 @@ export class UserService {
 
             throw error;
         }
+    }
+
+    async findByEmail(email: string) {
+        const user = await this.userRepository.findOne({
+            where: { email },
+        });
+        return user;
     }
 }
