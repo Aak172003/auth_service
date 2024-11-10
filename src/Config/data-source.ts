@@ -32,7 +32,8 @@ export const AppDataSource = new DataSource({
 
     // synchronize: NODE_ENV === "test" || NODE_ENV === "dev",
     // now mannually hum synchronise kr rhe hai using connection.synchronise()
-    synchronize: false,
+
+    synchronize: true, // for developemenet because here hum synchronise hi kr rhe hai
     logging: false,
 
     // entities: [User, RefreshToken],
