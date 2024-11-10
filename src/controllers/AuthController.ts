@@ -187,7 +187,8 @@ export class AuthController {
         }
     }
 
-    self(req: Request, res: Response) {
-        res.status(200).json({});
+    // eslint-disable-next-line @typescript-eslint/require-await
+    async self(req: Request, res: Response) {
+        res.json({});
     }
 }
