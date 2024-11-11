@@ -103,6 +103,40 @@ describe("Get /auth/self", () => {
                 savedUser.id,
             );
         });
+
+        it("should not the return password", async () => {
+            // Register user
+            const userData = {
+                firstName: "Rakesh",
+                lastName: "K",
+                email: "rakesh@mern.space",
+                password: "secret",
+            };
+
+            const hashedPassword = await bcrypt.hash(userData.password, 10);
+            const userRepository = connection.getRepository(User);
+            const savedUser = await userRepository.save({
+                ...userData,
+                password: hashedPassword,
+                role: Roles.CUSTOMER,
+            });
+
+            // Generate a Token
+            const accesstoken = jwks.token({
+                sub: String(savedUser.id),
+                role: savedUser.role,
+            });
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .get("/auth/self")
+                .set("Cookie", [`accessToken=${accesstoken};`])
+                .send();
+
+            console.log("password ----------- ", response.body);
+            // Ensure the response contains the user data
+            expect(response.body).not.toHaveProperty("password");
+        });
     });
     describe("Fields are missing", () => {});
 });
