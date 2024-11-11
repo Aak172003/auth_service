@@ -133,7 +133,6 @@ describe("Get /auth/self", () => {
                 .set("Cookie", [`accessToken=${accesstoken};`])
                 .send();
 
-            console.log("password ----------- ", response.body);
             // Ensure the response contains the user data
             expect(response.body).not.toHaveProperty("password");
         });
