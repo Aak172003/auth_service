@@ -13,7 +13,7 @@ describe("Get /auth/self", () => {
     let jwks: ReturnType<typeof createJWKSMock>;
 
     beforeAll(async () => {
-        jwks = createJWKSMock("http://localhost:5500");
+        jwks = createJWKSMock("http://localhost:5501");
         connection = await AppDataSource.initialize();
     });
 
@@ -135,6 +135,16 @@ describe("Get /auth/self", () => {
 
             // Ensure the response contains the user data
             expect(response.body).not.toHaveProperty("password");
+        });
+
+        it("should 401 status code if token does not exist in cookie", async () => {
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .get("/auth/self")
+                .send();
+
+            // Ensure the response contains the user data
+            expect(response.statusCode).toBe(401);
         });
     });
     describe("Fields are missing", () => {});

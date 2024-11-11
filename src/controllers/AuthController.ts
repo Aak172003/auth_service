@@ -190,6 +190,7 @@ export class AuthController {
     async self(req: AuthRequest, res: Response) {
         const user = await this.userService.findById(Number(req.auth.sub));
 
+        console.log("who am i ----------- ", user);
         // undefined means i remove the password from ...user data
         res.json({ ...user, password: undefined });
     }
