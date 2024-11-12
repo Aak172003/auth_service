@@ -10,7 +10,7 @@ import { Repository } from "typeorm";
 export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
 
-    generateToken(payLoad: JwtPayload) {
+    generateAccessToken(payLoad: JwtPayload) {
         let privateKey: Buffer;
 
         try {
@@ -57,5 +57,12 @@ export class TokenService {
         });
 
         return newRefreshToken;
+    }
+
+    async deleteRefreshToken(tokenId: number) {
+        const deletedRefreshToken = await this.refreshTokenRepository.delete({
+            id: tokenId,
+        });
+        return deletedRefreshToken;
     }
 }

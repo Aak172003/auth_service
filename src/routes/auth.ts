@@ -16,6 +16,8 @@ import loginValidator from "../validators/login-validator";
 import { CredentialService } from "../services/CredentialService";
 import authenticate from "../middlewares/authenticate";
 import { AuthRequest } from "../types";
+import validateRefreshToken from "../middlewares/validateRefreshToken";
+import parseRefreshToken from "../middlewares/parseRefreshToken";
 
 const router = express();
 const credentialService = new CredentialService();
@@ -59,4 +61,25 @@ router.get(
     (req: Request, res: Response) =>
         authController.self(req as AuthRequest, res),
 );
+
+// Why post is more secure than get
+
+router.post(
+    "/refresh",
+    validateRefreshToken as RequestHandler,
+    (req: Request, res: Response, next: NextFunction) =>
+        authController.refreshToken(req as AuthRequest, res, next),
+);
+
+router.post(
+    "/logout",
+    // only logged in user can logout
+    authenticate as RequestHandler,
+    // only loggedin user can authenticate
+    parseRefreshToken as RequestHandler,
+    async (req: Request, res: Response, next: NextFunction) => {
+        await authController.logout(req as AuthRequest, res, next);
+    },
+);
+
 export default router;

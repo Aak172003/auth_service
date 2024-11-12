@@ -63,7 +63,7 @@ export class AuthController {
                 role: createdUser.role,
             };
 
-            const accessToken = this.tokenService.generateToken(payLoad);
+            const accessToken = this.tokenService.generateAccessToken(payLoad);
 
             // Persist the refresh token in the database correspoint to user
 
@@ -155,7 +155,7 @@ export class AuthController {
                 role: user.role,
             };
 
-            const accessToken = this.tokenService.generateToken(payload);
+            const accessToken = this.tokenService.generateAccessToken(payload);
             const newRefreshToken =
                 await this.tokenService.persistRefreshToken(user);
 
@@ -190,8 +190,89 @@ export class AuthController {
     async self(req: AuthRequest, res: Response) {
         const user = await this.userService.findById(Number(req.auth.sub));
 
-        console.log("who am i ----------- ", user);
         // undefined means i remove the password from ...user data
         res.json({ ...user, password: undefined });
+    }
+
+    async refreshToken(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            // Prepare payload for accessToken
+            const payload: JwtPayload = {
+                sub: req.auth.sub,
+                role: req.auth.role,
+            };
+
+            // Call the generateAccessToken method and get the token
+            const accessToken = this.tokenService.generateAccessToken(payload);
+
+            // find user , because there is relation between refreshToken and user table
+            const user = await this.userService.findById(Number(req.auth.sub));
+
+            // Find user to delete the refreshToken corresponding to it in database
+            if (!user) {
+                const error = createHttpError(
+                    401,
+                    "User with the token couldn't find",
+                );
+
+                next(error);
+                return;
+            }
+
+            // Persist the refreshToken
+            const newRefreshToken = this.tokenService.persistRefreshToken(user);
+
+            // delete the old refreshToken
+            await this.tokenService.deleteRefreshToken(Number(req.auth?.id));
+
+            const refreshToken = this.tokenService.generateRefreshToken({
+                ...payload,
+                id: String((await newRefreshToken).id),
+            });
+
+            res.cookie("accessToken", accessToken, {
+                domain: "localhost",
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60, // 1 hour
+                // httpOnly means , that can access only by our server not access by client side
+                httpOnly: true,
+            });
+
+            res.cookie("refreshToken", refreshToken, {
+                domain: "localhost",
+                sameSite: "strict",
+                maxAge: 1000 * 60 * 60 * 24 * 365, // 1 Year
+                httpOnly: true,
+            });
+
+            res.json({ id: user.id });
+        } catch (err) {
+            console.log(err);
+            next(err);
+            return;
+        }
+    }
+
+    async logout(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+
+            this.logger.info("Refresh token has been deleted ", {
+                id: req.auth.id,
+            });
+            this.logger.info("user has been logged out ", { id: req.auth.sub });
+
+            // clear cookie after logout
+            res.clearCookie("accessToken");
+            res.clearCookie("refreshToken");
+
+            res.json({
+                success: "true",
+                message: "Logged out successfully",
+            });
+        } catch (error) {
+            next(error);
+            return;
+        }
     }
 }
