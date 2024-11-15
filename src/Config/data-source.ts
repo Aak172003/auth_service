@@ -2,25 +2,23 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { Config } from ".";
 
-const { DB_HOST, DB_USERNAME, DB_PASSWORD, DB_NAME } = Config;
+console.log("Config.DB_NAME from data-source ------ ", Config.DB_NAME);
+console.log(`For data-source ${Config.NODE_ENV} ENVIRONMENT`);
 
-// console.log("Config.DB_NAME from data-source ------ ", DB_NAME);
-// console.log(`For data-source ${NODE_ENV} ENVIRONMENT`);
+console.log("DB_USERNAME from data source ---- ", Config.DB_USERNAME);
 
-// console.log("DB_USERNAME from data source ---- ", DB_USERNAME);
-
-// console.log("DB_USERNAME from data source ---- ", DB_HOST);
-// console.log("DB_USERNAME from data source ---- ", DB_USERNAME);
-// console.log("DB_USERNAME from data source ---- ", DB_PORT);
-// console.log("DB_USERNAME from data source ---- ", DB_PASSWORD);
+console.log("DB_USERNAME from data source ---- ", Config.DB_HOST);
+console.log("DB_USERNAME from data source ---- ", Config.DB_USERNAME);
+console.log("DB_USERNAME from data source ---- ", Config.DB_PORT);
+console.log("DB_USERNAME from data source ---- ", Config.DB_PASSWORD);
 
 export const AppDataSource = new DataSource({
     type: "postgres",
-    host: DB_HOST,
+    host: Config.DB_HOST,
     port: 5432,
-    username: DB_USERNAME,
-    password: DB_PASSWORD,
-    database: DB_NAME,
+    username: Config.DB_USERNAME,
+    password: Config.DB_PASSWORD,
+    database: Config.DB_NAME,
 
     // This synchronize make sure for developement and testing true ,
     // but fot profuction case make sure this value is false
@@ -33,12 +31,12 @@ export const AppDataSource = new DataSource({
     // synchronize: NODE_ENV === "test" || NODE_ENV === "dev",
     // now mannually hum synchronise kr rhe hai using connection.synchronise()
 
-    synchronize: true, // for developemenet because here hum synchronise hi kr rhe hai
+    synchronize: false, // for developemenet because here hum synchronise hi kr rhe hai
     logging: false,
 
     // entities: [User, RefreshToken],
     entities: ["src/entity/*.ts"],
     // this is wild card pattern . here src/entity/*.ts -> * means any filename with .ts extension from src/entity directory
-    migrations: [],
+    migrations: ["src/migration/*.ts"],
     subscribers: [],
 });

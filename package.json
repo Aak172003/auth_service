@@ -12,7 +12,9 @@
         "prepare": "husky",
         "test": "jest --watch --runInBand",
         "start": "ts-node src/index.ts",
-        "typeorm": "typeorm-ts-node-commonjs"
+        "generate:migration": "npm run typeorm -- migration:generate src/migration/$npm_config_name -d src/config/data-source.ts",
+        "migration:run": "npm run typeorm -- migration:run -d src/config/data-source.ts",
+        "typeorm": "npx typeorm-ts-node-commonjs"
     },
     "author": "Aakash Prajapati <prajapatiaakash364@gmail.com>",
     "license": "ISC",
