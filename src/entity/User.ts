@@ -1,5 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Tenant } from "./Tenant";
+// press enter
 
 @Entity({ name: "users" })
 export class User {
