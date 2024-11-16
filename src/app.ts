@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 import logger from "./config/logger";
 import { HttpError } from "http-errors";
 import authRouter from "./routes/auth";
+import tenantRouter from "./routes/tenant";
 import cookieParser from "cookie-parser";
 
 const app: express.Express = express();
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 
 // API EndPoints
 app.use("/auth", authRouter);
+app.use("/tenants", tenantRouter);
 
 // Global Middleware -> which automatically execute whenever we hit any api endpoint
 // Global error Handler
@@ -27,7 +29,7 @@ app.use("/auth", authRouter);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((error: HttpError, req: Request, res: Response, next: NextFunction) => {
-    console.log("global error : ", error);
+    // console.log("global error : ", error);
     logger.error(error.message);
     const statusCode = error.statusCode || error.status || 500;
 
