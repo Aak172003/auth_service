@@ -18,14 +18,8 @@ export class TenantController {
         });
         try {
             const tenant = await this.tenantService.create({ name, address });
-
             this.logger.info("tenant has been created : ", { id: tenant.id });
             this.logger.info("created tenants : ", { tenant: tenant });
-
-            console.log(
-                "this is tenant created inside controller -------------------- ",
-                tenant,
-            );
             res.status(201).json({ id: tenant.id });
         } catch (error) {
             next(error);

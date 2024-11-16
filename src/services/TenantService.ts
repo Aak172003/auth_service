@@ -5,10 +5,6 @@ import { Tenant } from "../entity/Tenant";
 export class TenantService {
     constructor(private tenantRepository: Repository<Tenant>) {}
     async create(tenantData: ITenant) {
-        const createTenant = await this.tenantRepository.save(tenantData);
-
-        console.log("createTenant ---------------- ", createTenant);
-
-        return createTenant;
+        return await this.tenantRepository.save(tenantData);
     }
 }
