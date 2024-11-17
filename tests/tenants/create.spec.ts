@@ -102,6 +102,32 @@ describe("POST /tenants", () => {
 
             expect(tenants).toHaveLength(0);
         });
+
+        // Permission issue
+        it("should return 403 if user is not an Admin", async () => {
+            // Generate a Token
+            const managerToken = jwks.token({
+                sub: "1",
+                role: Roles.MANAGER,
+            });
+            const tenantData = {
+                name: "Tenant 1",
+                address: "Address 1",
+            };
+
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
+            const response = await request(app as any)
+                .post("/tenants")
+                .set("Cookie", [`accessToken=${managerToken};`])
+                .send(tenantData);
+
+            expect(response.statusCode).toBe(403);
+            const tenantRepository = connection.getRepository(Tenant);
+
+            const tenants = await tenantRepository.find();
+            // when above contion is not satisfied , then no new entery create in DataBase
+            expect(tenants).toHaveLength(0);
+        });
     });
 
     describe("Fields are missing", () => {});
