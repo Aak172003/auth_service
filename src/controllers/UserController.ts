@@ -23,7 +23,8 @@ export class UserController {
             return res.status(400).json({ errors: result.array() });
         }
 
-        const { firstName, lastName, email, password, role } = req.body;
+        const { firstName, lastName, email, password, role, tenantId } =
+            req.body;
         try {
             const user = await this.userService.create({
                 firstName,
@@ -31,6 +32,7 @@ export class UserController {
                 email,
                 password,
                 role,
+                tenantId,
             });
 
             console.log("this is user from laptop ------------ ", user);

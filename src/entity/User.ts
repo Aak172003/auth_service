@@ -18,7 +18,7 @@ export class User {
 
     // @Column({select:false}) -> if i do globally , so jaha jaha i need passwrod i need to mention {select:["password"]} ,
     // which means it extract only password fields from whole user resposne
-    @Column()
+    @Column({ select: false })
     password: string;
 
     @Column()

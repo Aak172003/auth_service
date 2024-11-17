@@ -21,7 +21,14 @@ export class UserService {
     //     this.userRepositery = userRepositery;
     // }
 
-    async create({ firstName, lastName, email, password, role }: UserData) {
+    async create({
+        firstName,
+        lastName,
+        email,
+        password,
+        role,
+        tenantId,
+    }: UserData) {
         // Find any user is already register with the email id or not
         const findUser = await this.userRepository.findOne({
             where: { email: email },
@@ -44,6 +51,7 @@ export class UserService {
                 email,
                 password: hashedPassword,
                 role,
+                tenantId: tenantId ? { id: tenantId } : undefined,
             });
             return savedUser;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -57,9 +65,19 @@ export class UserService {
         }
     }
 
-    async findByEmail(email: string) {
+    async findByEmailWithPassword(email: string) {
+        // as entity me maine password ko select false kia hai to wo yaha hashedpassword milega nhi , so wo kisse compare krega
+        // that's why here maine all keys with password ko bhi explicitely add kia ki wo bhi mile mujhe
         const user = await this.userRepository.findOne({
             where: { email },
+            select: [
+                "id",
+                "firstName",
+                "lastName",
+                "email",
+                "password",
+                "role",
+            ],
         });
         return user;
     }

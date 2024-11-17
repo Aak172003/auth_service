@@ -1,5 +1,6 @@
-import { DataSource } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import logger from "./config/logger";
+import { Tenant } from "./entity/Tenant";
 
 export const calculateDiscount = (price: number, percentage: number) => {
     return price * (percentage / 100);
@@ -41,4 +42,16 @@ export const isJWT = (token: string | null): boolean => {
         logger.error("tokan can follow the JWT format", error);
         return false;
     }
+};
+
+export const createTenant = async (repository: Repository<Tenant>) => {
+    const tenantData = {
+        name: "Test tenant name",
+        address: "Test tenant Address",
+    };
+    const tenant = await repository.save(tenantData);
+
+    console.log("tenant created --------------- ", tenant);
+
+    return tenant;
 };

@@ -6,6 +6,8 @@ import request from "supertest";
 import app from "../../src/app";
 import { Roles } from "../../src/constants";
 import { User } from "../../src/entity/User";
+import { Tenant } from "../../src/entity/Tenant";
+import { createTenant } from "../../src/utils";
 
 describe("POST /users", () => {
     let connection: DataSource;
@@ -35,6 +37,9 @@ describe("POST /users", () => {
 
     describe("Given all fields", () => {
         it("should persist the user in the database", async () => {
+            const tenant = await createTenant(connection.getRepository(Tenant));
+
+            console.log("user test -------- tenant create ---------- ", tenant);
             const adminToken = jwks.token({
                 sub: "1",
                 role: Roles.ADMIN,
@@ -46,7 +51,7 @@ describe("POST /users", () => {
                 lastName: "K",
                 email: "rakesh@mern.space",
                 password: "secret",
-                tenantId: 1,
+                tenantId: tenant.id,
                 role: Roles.MANAGER,
             };
 
