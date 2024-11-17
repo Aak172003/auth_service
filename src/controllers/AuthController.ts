@@ -36,7 +36,8 @@ export class AuthController {
             return res.status(400).json({ errors: result.array() });
         }
 
-        const { firstName, lastName, email, password } = req.body;
+        const { firstName, lastName, email, password, role, tenantId } =
+            req.body;
 
         // This is logger
         this.logger.debug("New request to register a user ", {
@@ -51,7 +52,8 @@ export class AuthController {
                 lastName,
                 email,
                 password,
-                role: Roles.CUSTOMER,
+                role: role || Roles.CUSTOMER,
+                tenantId,
             });
 
             this.logger.info(ResponseMessage.USER_REGISTERED_SUCCESSFULLY, {
@@ -127,7 +129,7 @@ export class AuthController {
         // return the response (id)
 
         try {
-            const user = await this.userService.findByEmail(email);
+            const user = await this.userService.findByEmailWithPassword(email);
             if (!user) {
                 const error = createHttpError(
                     404,

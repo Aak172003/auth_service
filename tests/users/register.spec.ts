@@ -164,7 +164,10 @@ describe("POST /auth/register", () => {
 
             const userRepository = connection.getRepository(User);
 
-            const users = await userRepository.find();
+            // const users = await userRepository.find();
+
+            // explicitely i mention that get only password
+            const users = await userRepository.find({ select: ["password"] });
 
             expect(users[0].password).not.toBe(userData.password);
             expect(users[0].password).toHaveLength(60);

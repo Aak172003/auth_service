@@ -83,6 +83,14 @@ describe("POST /auth/login", () => {
                 .post("/auth/login")
                 .send(userData);
 
+            console.log(
+                "response ------------ login valid json response ----------- ",
+                response.body,
+            );
+            console.log(
+                "response --------- sttaus code ------------- ",
+                response.statusCode,
+            );
             // Assert -> application/json
             // response headers has content type information
 
