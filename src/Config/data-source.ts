@@ -35,8 +35,8 @@ export const AppDataSource = new DataSource({
     logging: false,
 
     // entities: [User, RefreshToken],
-    entities: ["src/entity/*.ts"],
+    entities: ["src/entity/*.{ts,js}"],
     // this is wild card pattern . here src/entity/*.ts -> * means any filename with .ts extension from src/entity directory
-    migrations: ["src/migration/*.ts"],
+    migrations: ["src/migration/*.{ts, js}"],
     subscribers: [],
 });
