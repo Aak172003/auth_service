@@ -47,6 +47,7 @@ describe("POST /users", () => {
                 email: "rakesh@mern.space",
                 password: "secret",
                 tenantId: 1,
+                role: Roles.MANAGER,
             };
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any
@@ -78,6 +79,7 @@ describe("POST /users", () => {
                 email: "rakesh@mern.space",
                 password: "secret",
                 tenantId: 1,
+                role: Roles.MANAGER,
             };
 
             // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-explicit-any

@@ -55,9 +55,10 @@ export class TenantController {
         }
 
         const { name, address } = req.body;
-        const tenantId = req.params.id;
+        const tenantId = req.params.tenantId;
 
         if (isNaN(Number(tenantId))) {
+            console.log("if not a number");
             const error = createHttpError(400, "Invalid url param");
             next(error);
             return;
@@ -94,7 +95,7 @@ export class TenantController {
     }
 
     async getOne(req: Request, res: Response, next: NextFunction) {
-        const tenantId = req.params.id;
+        const tenantId = req.params.tenantId;
         console.log("tenant id for fetch single tenant : ", tenantId);
 
         if (isNaN(Number(tenantId))) {
@@ -119,7 +120,7 @@ export class TenantController {
     }
 
     async destroy(req: Request, res: Response, next: NextFunction) {
-        const tenantId = req.params.id;
+        const tenantId = req.params.tenantId;
         console.log("tenant id for fetch delete : ", tenantId);
 
         if (isNaN(Number(tenantId))) {

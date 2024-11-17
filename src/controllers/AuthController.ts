@@ -36,7 +36,7 @@ export class AuthController {
             return res.status(400).json({ errors: result.array() });
         }
 
-        const { firstName, lastName, email, password } = req.body;
+        const { firstName, lastName, email, password, role } = req.body;
 
         // This is logger
         this.logger.debug("New request to register a user ", {
@@ -51,7 +51,7 @@ export class AuthController {
                 lastName,
                 email,
                 password,
-                role: Roles.CUSTOMER,
+                role: role || Roles.CUSTOMER,
             });
 
             this.logger.info(ResponseMessage.USER_REGISTERED_SUCCESSFULLY, {
