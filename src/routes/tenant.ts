@@ -39,8 +39,11 @@ router.patch(
 
 router.get("/", (req, res, next) => tenantController.getAll(req, res, next));
 
-router.get("/:tenantId", (req, res, next) =>
-    tenantController.getOne(req, res, next),
+router.get(
+    "/:tenantId",
+    authenticate as RequestHandler,
+    canAccess([Roles.ADMIN]),
+    (req, res, next) => tenantController.getOne(req, res, next),
 );
 
 router.delete(

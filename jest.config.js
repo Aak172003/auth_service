@@ -7,4 +7,7 @@ module.exports = {
 
     // becuase of verbose true , test cases will show in proper structured way
     verbose: true,
+    collectCoverage: true,
+    coverageProvider: "v8",
+    collectCoverageFrom: ["src/**/*.ts", "!tests/**", "!**/node_modules/**"],
 };
