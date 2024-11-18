@@ -1,11 +1,11 @@
 import fs from "fs";
 import createHttpError from "http-errors";
 import { JwtPayload, sign } from "jsonwebtoken";
-import path from "path";
 import { Config } from "../config";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
 import { Repository } from "typeorm";
+import path from "path";
 
 export class TokenService {
     constructor(private refreshTokenRepository: Repository<RefreshToken>) {}
@@ -13,11 +13,20 @@ export class TokenService {
     generateAccessToken(payLoad: JwtPayload) {
         let privateKey: Buffer;
 
+        // let privateKey: string;
+
+        // if (!Config.PRIVATE_KEY) {
+        //     const error = createHttpError(500, "Secret Key is not set ");
+        //     throw error;
+        // }
+
         try {
             // __dirname means pointing to current folder
             privateKey = fs.readFileSync(
                 path.join(__dirname, "../../certs/private.pem"),
             );
+
+            // privateKey = Config.PRIVATE_KEY;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
             const error = createHttpError(
