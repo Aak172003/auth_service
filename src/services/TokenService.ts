@@ -26,10 +26,10 @@ export class TokenService {
                 path.join(__dirname, "../../certs/private.pem"),
             );
 
-            console.log(
-                "this is privateKey ----------- privateKey ---------------- ",
-                privateKey,
-            );
+            // console.log(
+            //     "this is privateKey ----------- privateKey ---------------- ",
+            //     privateKey,
+            // );
 
             // privateKey = Config.PRIVATE_KEY;
             // eslint-disable-next-line @typescript-eslint/no-unused-vars
