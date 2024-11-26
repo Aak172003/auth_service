@@ -28,7 +28,7 @@ jobs:
             - name: Install dependencies
               run: npm ci
             - name: Run eslint
-              run: npm run lint
+              run: npm run lint:check
             - name: Run prettier
               run: npm run format:fix
             - name: Test and coverage
