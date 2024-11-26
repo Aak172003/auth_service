@@ -27,8 +27,8 @@ jobs:
             - uses: actions/checkout@v3
             - name: Install dependencies
               run: npm ci
-            # - name: Run eslint
-            #   run: npm run lint:fix
+            - name: Run eslint
+              run: npm run lint:fix
             - name: Run prettier
               run: npm run format:fix
             # - name: Test and coverage
@@ -42,8 +42,8 @@ jobs:
                   REFRESH_SECRET_KEY: ${{ secrets.REFRESH_TOKEN_SECRET }}
                   JWKS_URI: ${{ secrets.JWKS_URI }}
                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-            # - name: Build ts
-            #   run: npm run build
+            - name: Build ts
+              run: npm run build
             - name: SonarCloud Scan
               uses: SonarSource/sonarcloud-github-action@master
               env:
