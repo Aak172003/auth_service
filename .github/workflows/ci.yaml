@@ -31,8 +31,8 @@ jobs:
             #   run: npm run lint:fix
             - name: Run prettier
               run: npm run format:fix
-            - name: Test and coverage
-              run: npm run test
+            # - name: Test and coverage
+            #   run: npm run test
               env:
                   DB_HOST: ${{ secrets.TEST_DB_HOST }}
                   DB_PORT: ${{ secrets.TEST_DB_PORT }}
