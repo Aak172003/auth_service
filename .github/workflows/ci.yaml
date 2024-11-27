@@ -1,67 +1,6 @@
-# name: CI
-
-# # This is the triggers block
-# on:
-#     pull_request:
-#         branches:
-#             - main
-#     push:
-#         branches:
-#             - main
-
-# jobs:
-#     build-and-test:
-#         name: Build the project
-#         # Run on which machine
-#         runs-on: ubuntu-latest
-#         steps:
-#             - uses: actions/checkout@v3
-#             - name: Install Dependencies
-#               run: npm ci
-#             # - name: Run ESLint
-#             #   run: npm run lint
-#             - name: Test and Coverage
-#               run: npm run test
-#               env:
-#                   DB_HOST: ${{ secrets.TEST_DB_HOST }}
-#                   DB_PORT: ${{ secrets.TEST_DB_PORT }}
-#                   DB_USERNAME: ${{ secrets.TEST_DB_USERNAME }}
-#                   DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
-#                   DB_NAME: ${{ secrets.TEST_DB_NAME }}
-#                   REFRESH_SECRET_KEY: ${{ secrets.REFRESH_SECRET_KEY }}
-#                   JWKS_URI: ${{ secrets.JWKS_URI }}
-#                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-#             - name: Build TypeScript
-#               run: npm run build
-#             - name: SonarCloud Scan
-#               uses: SonarSource/sonarcloud-github-action@master
-#               env:
-#                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-#     build-and-push-docker:
-#         name: Build and Push Docker Image
-#         needs: build-and-test
-#         runs-on: ubuntu-latest
-#         env:
-#             IMAGE_NAME: aakash1707/mernstack-auth-service
-#             IMAGE_TAG: build-${{ github.run_number }}
-#         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-#         steps:
-#             - name: Checkout Repository
-#               uses: actions/checkout@v3
-#             - name: Log into Docker Hub
-#               uses: docker/login-action@v1
-#               with:
-#                   username: ${{ secrets.DOCKERHUB_USERNAME }}
-#                   password: ${{ secrets.DOCKERHUB_PASSWORD }}
-#             - name: Build Docker Image
-#               run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f docker/prod/Dockerfile .
-#             - name: Push Docker Image to Docker Hub
-#               run: docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
-
 name: CI
 
+# This is the triggers block
 on:
     pull_request:
         branches:
@@ -72,20 +11,16 @@ on:
 
 jobs:
     build-and-test:
-        name: Build and Test
+        name: Build the project
+        # Run on which machine
         runs-on: ubuntu-latest
         steps:
-            - name: Checkout Code
-              uses: actions/checkout@v3
-
+            - uses: actions/checkout@v3
             - name: Install Dependencies
               run: npm ci
-
-            # Uncomment this if linting is required
             # - name: Run ESLint
             #   run: npm run lint
-
-            - name: Run Tests and Generate Coverage
+            - name: Test and Coverage
               run: npm run test
               env:
                   DB_HOST: ${{ secrets.TEST_DB_HOST }}
@@ -96,12 +31,10 @@ jobs:
                   REFRESH_SECRET_KEY: ${{ secrets.REFRESH_SECRET_KEY }}
                   JWKS_URI: ${{ secrets.JWKS_URI }}
                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-
-            - name: Build TypeScript Project
+            - name: Build TypeScript
               run: npm run build
-
-            - name: Run SonarCloud Scan
-              uses: SonarSource/sonarcloud-github-action@v2
+            - name: SonarCloud Scan
+              uses: SonarSource/sonarcloud-github-action@master
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -110,22 +43,19 @@ jobs:
         name: Build and Push Docker Image
         needs: build-and-test
         runs-on: ubuntu-latest
-        if: github.ref == 'refs/heads/main' && github.event == 'push'
         env:
             IMAGE_NAME: aakash1707/mernstack-auth-service
             IMAGE_TAG: build-${{ github.run_number }}
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         steps:
             - name: Checkout Repository
               uses: actions/checkout@v3
-
-            - name: Log in to Docker Hub
-              uses: docker/login-action@v2
+            - name: Log into Docker Hub
+              uses: docker/login-action@v1
               with:
                   username: ${{ secrets.DOCKERHUB_USERNAME }}
                   password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
             - name: Build Docker Image
               run: docker build -t ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }} -f docker/prod/Dockerfile .
-
             - name: Push Docker Image to Docker Hub
               run: docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
