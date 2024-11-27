@@ -1,6 +1,6 @@
 # Use Multi-Step build systems
 # Alpine is a ligher weight version of nodejs 18
-FROM node:18-alpine as builder
+FROM node:18-alpine AS builder
 
 WORKDIR /app
 
@@ -20,7 +20,7 @@ RUN npm run build
 
 
 # Second
-FROM node:18-alpine as production
+FROM node:18-alpine AS production
 
 # because of this this will only dependencies not install dev-dependencies
 # due to this out image size will automatically reduce
