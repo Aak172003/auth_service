@@ -17,6 +17,7 @@ const {
     DB_NAME,
     REFRESH_SECRET_KEY,
     JWKS_URI,
+    PRIVATE_KEY,
 } = process.env;
 
 // console.log("Config.DB_NAME from data-source ------ ", DB_NAME);
@@ -39,4 +40,5 @@ export const Config = {
     DB_NAME,
     REFRESH_SECRET_KEY,
     JWKS_URI,
+    PRIVATE_KEY,
 };
