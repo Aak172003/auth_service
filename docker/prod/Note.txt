@@ -1,0 +1,2 @@
+How we decrease the file size , so we don't provide source folder we will give build folder because this is a compiled vesion of out project
+
