@@ -111,5 +111,5 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true
     }, 
-    "exclude": ["**/*.spec.ts", "tests"]
+    // "exclude": ["**/*.spec.ts", "tests"]
 }
