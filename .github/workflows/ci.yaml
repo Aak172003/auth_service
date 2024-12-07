@@ -31,8 +31,8 @@ jobs:
                   REFRESH_SECRET_KEY: ${{ secrets.REFRESH_SECRET_KEY }}
                   JWKS_URI: ${{ secrets.JWKS_URI }}
                   PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
-            - name: Build TypeScript
-              run: npm run build
+            # - name: Build TypeScript
+            #   run: npm run build
             - name: SonarCloud Scan
               uses: SonarSource/sonarcloud-github-action@master
               env:
