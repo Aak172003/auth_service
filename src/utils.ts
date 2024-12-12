@@ -1,6 +1,6 @@
 import { DataSource, Repository } from "typeorm";
 import logger from "./set-up/logger";
-import { Tenant } from "./entity/Tenant";
+import { Tenant } from "./entity/tenant";
 
 export const calculateDiscount = (price: number, percentage: number) => {
     return price * (percentage / 100);
