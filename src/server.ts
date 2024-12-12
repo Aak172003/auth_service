@@ -1,15 +1,15 @@
 import app from "./app";
 import { Config } from "./set-up";
-// import { AppDataSource } from "./set-up/data-source";
+import { AppDataSource } from "./set-up/data-source";
 import logger from "./set-up/logger";
 
-const startServer = () => {
+const startServer = async () => {
     const PORT = Config.PORT;
 
     console.log("PORT ----------------------------- ", PORT);
     try {
         // Need too create connection with database
-        // await AppDataSource.initialize();
+        await AppDataSource.initialize();
         console.log("Db Connected successfully");
         logger.info("Datbase connect Successfully");
 
@@ -36,5 +36,5 @@ const startServer = () => {
     }
 };
 
-// void startServer();
-startServer();
+void startServer();
+// startServer();
