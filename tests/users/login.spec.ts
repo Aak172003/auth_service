@@ -1,10 +1,10 @@
 import request from "supertest";
 import app from "../../src/app";
-import { AppDataSource } from "../../src/Config/data-source";
 import { DataSource } from "typeorm";
 import bcrypt from "bcrypt";
 import { User } from "../../src/entity/User";
 import { Roles } from "../../src/constants";
+import { AppDataSource } from "../../src/set-up/data-source";
 
 describe("POST /auth/login", () => {
     let connection: DataSource;

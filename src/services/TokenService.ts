@@ -1,6 +1,6 @@
 import createHttpError from "http-errors";
 import { JwtPayload, sign } from "jsonwebtoken";
-import { Config } from "../config";
+import { Config } from "../set-up";
 import { RefreshToken } from "../entity/RefreshToken";
 import { User } from "../entity/User";
 import { Repository } from "typeorm";

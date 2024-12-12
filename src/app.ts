@@ -1,12 +1,12 @@
 import "reflect-metadata";
 
 import express, { NextFunction, Request, Response } from "express";
-import logger from "./Config/logger";
+import logger from "./set-up/logger";
 import { HttpError } from "http-errors";
 import authRouter from "./routes/auth";
-import tenantRouter from "./routes/tenant";
 import userRouter from "./routes/user";
 import cookieParser from "cookie-parser";
+import tenantRouter from "./routes/tenant";
 
 const app: express.Express = express();
 

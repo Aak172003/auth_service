@@ -1,9 +1,9 @@
 import express, { NextFunction, RequestHandler, Response } from "express";
 import { TenantController } from "../controllers/TenantController";
 import { TenantService } from "../services/TenantService";
-import { AppDataSource } from "../config/data-source";
+import { AppDataSource } from "../set-up/data-source";
 import { Tenant } from "../entity/Tenant";
-import logger from "../config/logger";
+import logger from "../set-up/logger";
 import authenticate from "../middlewares/authenticate";
 import { canAccess } from "../middlewares/canAccess";
 import { Roles } from "../constants";

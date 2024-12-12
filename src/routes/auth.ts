@@ -6,9 +6,9 @@ import express, {
 } from "express";
 import { AuthController } from "../controllers/AuthController";
 import { UserService } from "../services/UserService";
-import { AppDataSource } from "../config/data-source";
+import { AppDataSource } from "../set-up/data-source";
 import { User } from "../entity/User";
-import logger from "../config/logger";
+import logger from "../set-up/logger";
 import registerValidator from "../validators/register-validator";
 import { TokenService } from "../services/TokenService";
 import { RefreshToken } from "../entity/RefreshToken";
