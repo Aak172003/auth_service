@@ -3,7 +3,6 @@ import { expressjwt } from "express-jwt";
 import { AuthCookie } from "../types";
 import { Config } from "../set-up";
 
-console.log("Config ------------------- ", Config);
 export default expressjwt({
     secret: Config.REFRESH_SECRET_KEY!,
     algorithms: ["HS256"],
