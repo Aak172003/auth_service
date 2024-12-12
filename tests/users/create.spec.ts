@@ -1,4 +1,4 @@
-import { AppDataSource } from "../../src/config/data-source";
+import { AppDataSource } from "../../src/Config/data-source";
 import { DataSource } from "typeorm";
 import createJWKSMock from "mock-jwks";
 
@@ -6,7 +6,7 @@ import request from "supertest";
 import app from "../../src/app";
 import { Roles } from "../../src/constants";
 import { User } from "../../src/entity/User";
-import { Tenant } from "../../src/entity/Tenant";
+import { Tenant } from "../../src/entity/tenant";
 import { createTenant } from "../../src/utils";
 
 describe("POST /users", () => {
