@@ -1,6 +1,6 @@
 import request from "supertest";
 import app from "../../src/app";
-import { AppDataSource } from "../../src/config/data-source";
+import { AppDataSource } from "../../src/Config/data-source";
 import { DataSource } from "typeorm";
 import bcrypt from "bcrypt";
 import { User } from "../../src/entity/User";
