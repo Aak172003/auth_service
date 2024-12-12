@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { ITenant } from "../types";
-import { Tenant } from "../entity/Tenant";
+import { Tenant } from "../entity/tenant";
 
 export class TenantService {
     constructor(private tenantRepository: Repository<Tenant>) {}
