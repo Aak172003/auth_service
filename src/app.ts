@@ -1,7 +1,7 @@
 import "reflect-metadata";
 
 import express, { NextFunction, Request, Response } from "express";
-import logger from "./config/logger";
+import logger from "./Config/logger";
 import { HttpError } from "http-errors";
 import authRouter from "./routes/auth";
 import tenantRouter from "./routes/tenant";
