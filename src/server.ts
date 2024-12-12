@@ -6,11 +6,9 @@ import logger from "./set-up/logger";
 const startServer = async () => {
     const PORT = Config.PORT;
 
-    // console.log("PORT ----------------------------- ", PORT);
     try {
         // Need too create connection with database
         await AppDataSource.initialize();
-        console.log("Db Connected successfully");
         logger.info("Datbase connect Successfully");
 
         app.listen(PORT, () => {
@@ -37,4 +35,3 @@ const startServer = async () => {
 };
 
 void startServer();
-// startServer();
