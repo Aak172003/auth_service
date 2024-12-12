@@ -3,7 +3,7 @@ import { DataSource } from "typeorm";
 import request from "supertest";
 import createJWKSMock from "mock-jwks";
 import { Roles } from "../../src/constants";
-import { Tenant } from "../../src/entity/Tenant";
+import { Tenant } from "../../src/entity/tenant";
 import { AppDataSource } from "../../src/set-up/data-source";
 
 describe("POST /tenants", () => {

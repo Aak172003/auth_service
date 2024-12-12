@@ -7,7 +7,7 @@ import { Roles } from "../../src/constants";
 import { User } from "../../src/entity/User";
 import { createTenant } from "../../src/utils";
 import { AppDataSource } from "../../src/set-up/data-source";
-import { Tenant } from "../../src/entity/Tenant";
+import { Tenant } from "../../src/entity/tenant";
 
 describe("POST /users", () => {
     let connection: DataSource;
