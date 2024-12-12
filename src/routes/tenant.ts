@@ -2,7 +2,7 @@ import express, { NextFunction, RequestHandler, Response } from "express";
 import { TenantController } from "../controllers/TenantController";
 import { TenantService } from "../services/TenantService";
 import { AppDataSource } from "../set-up/data-source";
-import { Tenant } from "../entity/Tenant";
+import { Tenant } from "../entity/tenant";
 import logger from "../set-up/logger";
 import authenticate from "../middlewares/authenticate";
 import { canAccess } from "../middlewares/canAccess";
