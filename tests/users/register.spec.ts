@@ -1,7 +1,7 @@
 import request from "supertest";
 import app from "../../src/app";
 import { User } from "../../src/entity/User";
-import { AppDataSource } from "../../src/config/data-source";
+import { AppDataSource } from "../../src/Config/data-source";
 import { DataSource } from "typeorm";
 import { Roles } from "../../src/constants";
 import { isJWT } from "../../src/utils";
