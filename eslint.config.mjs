@@ -18,6 +18,7 @@ export default tseslint.config(
             "tests/",
             "coverage/",
             ".github",
+            "src/migration"
         ],
     },
     {

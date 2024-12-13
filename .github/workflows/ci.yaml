@@ -60,9 +60,6 @@
 #             - name: Push Docker Image to Docker Hub
 #               run: docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-
-
-
 # name: CI
 # # This is the triggers block
 
@@ -125,10 +122,6 @@
 #             - name: Push Docker Image to Docker Hub
 #               run: docker push ${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
 
-
-              
-
-
 name: CI
 # This is the triggers block
 
@@ -151,8 +144,8 @@ jobs:
               run: npm ci
             - name: Run ESLint
               run: npm run lint
-            # - name: Test and Coverage
-            #   run: npm run test
+              # - name: Test and Coverage
+              #   run: npm run test
               env:
                   DB_HOST: ${{ secrets.TEST_DB_HOST }}
                   DB_PORT: ${{ secrets.TEST_DB_PORT }}
