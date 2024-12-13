@@ -217,8 +217,8 @@ describe("POST /auth/register", () => {
                 .send(userData);
 
             // Assert
-            let accessToken = null;
-            let refreshToken = null;
+            let accessToken = "";
+            let refreshToken = "";
 
             const cookies = response.headers["set-cookie"] || [];
 
