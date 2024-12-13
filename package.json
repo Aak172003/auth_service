@@ -11,7 +11,7 @@
         "format:check": "prettier . --check",
         "format:fix": "prettier . --write",
         "prepare": "husky",
-        "test": "jest --no-cache --all --runInBand",
+        "test": "jest --no-cache --coverage --all --runInBand",
         "test:watch": "jest --watch --runInBand",
         "start": "ts-node src/index.ts",
         "generate:migration": "npm run typeorm -- migration:generate src/migration/$npm_config_name -d src/config/data-source.ts",
@@ -23,6 +23,7 @@
     "license": "ISC",
     "devDependencies": {
         "@eslint/js": "^9.14.0",
+        "@types/bcryptjs": "^2.4.6",
         "@types/eslint__js": "^8.42.3",
         "@types/express": "^5.0.0",
         "@types/http-errors": "^2.0.4",
@@ -53,9 +54,8 @@
         ]
     },
     "dependencies": {
-        "@types/bcrypt": "^5.0.2",
         "@types/cookie-parser": "^1.4.7",
-        "bcrypt": "^5.1.1",
+        "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.7",
         "dotenv": "^16.4.5",
         "express": "^4.21.1",

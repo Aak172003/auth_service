@@ -9,7 +9,7 @@ module.exports = {
     verbose: true,
 
     // below three setup while setup test coverage
-    // collectCoverage: true,
-    // coverageProvider: "v8",
-    // collectCoverageFrom: ["src/**/*.ts", "!tests/**", "!**/node_modules/**"],
+    collectCoverage: true,
+    coverageProvider: "v8",
+    collectCoverageFrom: ["src/**/*.ts", "!tests/**", "!**/node_modules/**"],
 };

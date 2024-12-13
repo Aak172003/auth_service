@@ -173,7 +173,7 @@ describe("POST /auth/register", () => {
             expect(users[0].password).toHaveLength(60);
 
             // Check here this hashd password is really match the wile card pattern
-            expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
+            expect(users[0].password).toMatch(/^\$2[a|b]\$\d+\$/);
         });
 
         it("should return 400 status code if given email is already exist", async () => {
