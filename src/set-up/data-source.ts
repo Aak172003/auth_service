@@ -2,16 +2,6 @@ import "reflect-metadata";
 import { DataSource } from "typeorm";
 import { Config } from ".";
 
-// console.log("Config.DB_NAME from data-source ------ ", Config.DB_NAME);
-// console.log(`For data-source ${Config.NODE_ENV} ENVIRONMENT`);
-
-// console.log("DB_USERNAME from data source ---- ", Config.DB_USERNAME);
-
-// console.log("DB_USERNAME from data source ---- ", Config.DB_HOST);
-// console.log("DB_USERNAME from data source ---- ", Config.DB_USERNAME);
-// console.log("DB_USERNAME from data source ---- ", Config.DB_PORT);
-// console.log("DB_USERNAME from data source ---- ", Config.DB_PASSWORD);
-
 export const AppDataSource = new DataSource({
     type: "postgres",
     host: Config.DB_HOST,

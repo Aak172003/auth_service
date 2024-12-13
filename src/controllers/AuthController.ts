@@ -3,7 +3,7 @@ import { NextFunction, Response } from "express";
 import { AuthRequest, LoginUserRequest, RegisterUserRequest } from "../types";
 import { UserService } from "../services/UserService";
 import { Logger } from "winston";
-import { ResponseMessage } from "../config/responseMessage";
+import { ResponseMessage } from "../set-up/responseMessage";
 import { validationResult } from "express-validator";
 import { JwtPayload } from "jsonwebtoken";
 import { TokenService } from "../services/TokenService";

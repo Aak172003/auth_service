@@ -1,14 +1,14 @@
 import app from "./app";
-import { Config } from "./config";
-import { AppDataSource } from "./config/data-source";
-import logger from "./config/logger";
+import { Config } from "./set-up";
+import { AppDataSource } from "./set-up/data-source";
+import logger from "./set-up/logger";
 
 const startServer = async () => {
     const PORT = Config.PORT;
+
     try {
         // Need too create connection with database
         await AppDataSource.initialize();
-
         logger.info("Datbase connect Successfully");
 
         app.listen(PORT, () => {

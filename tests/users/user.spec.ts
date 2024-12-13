@@ -1,12 +1,12 @@
-import { AppDataSource } from "../../src/Config/data-source";
 import { DataSource } from "typeorm";
 import createJWKSMock from "mock-jwks";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 import request from "supertest";
 import app from "../../src/app";
 import { Roles } from "../../src/constants";
 import { User } from "../../src/entity/User";
+import { AppDataSource } from "../../src/set-up/data-source";
 
 describe("Get /auth/self", () => {
     let connection: DataSource;

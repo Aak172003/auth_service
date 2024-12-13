@@ -1,11 +1,11 @@
 import request from "supertest";
 import app from "../../src/app";
 import { User } from "../../src/entity/User";
-import { AppDataSource } from "../../src/Config/data-source";
 import { DataSource } from "typeorm";
 import { Roles } from "../../src/constants";
 import { isJWT } from "../../src/utils";
 import { RefreshToken } from "../../src/entity/RefreshToken";
+import { AppDataSource } from "../../src/set-up/data-source";
 
 describe("POST /auth/register", () => {
     let connection: DataSource;
@@ -173,7 +173,7 @@ describe("POST /auth/register", () => {
             expect(users[0].password).toHaveLength(60);
 
             // Check here this hashd password is really match the wile card pattern
-            expect(users[0].password).toMatch(/^\$2b\$\d+\$/);
+            expect(users[0].password).toMatch(/^\$2[a|b]\$\d+\$/);
         });
 
         it("should return 400 status code if given email is already exist", async () => {
@@ -217,8 +217,8 @@ describe("POST /auth/register", () => {
                 .send(userData);
 
             // Assert
-            let accessToken = null;
-            let refreshToken = null;
+            let accessToken = "";
+            let refreshToken = "";
 
             const cookies = response.headers["set-cookie"] || [];
 

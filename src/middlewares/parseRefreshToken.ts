@@ -1,7 +1,7 @@
 import { Request } from "express";
 import { expressjwt } from "express-jwt";
-import { Config } from "../config";
 import { AuthCookie } from "../types";
+import { Config } from "../set-up";
 
 export default expressjwt({
     secret: Config.REFRESH_SECRET_KEY!,
